@@ -1,0 +1,21 @@
+.container {
+  display: flex;
+  align-items: center;
+  padding: 0%;
+}
+
+.search {
+  height: 100%;
+  border-top-left-radius: 8px;
+  border-bottom-left-radius: 8px;
+  width: 35vw;
+  padding: 9px 20px;
+
+}
+
+.searchButton {
+  border-top-right-radius: 8px;
+  border-bottom-right-radius: 8px;
+  padding: 9px 20px;
+  height: 100%;
+}
