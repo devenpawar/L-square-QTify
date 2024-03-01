@@ -4,14 +4,14 @@ import { ReactComponent as SearchIcon } from "../../assets/searchIcon.svg";
 
 function Searchbar() {
   return (
-    <div className={styles.container}>
+    <form className={styles.container}>
       <input
         type="text"
         className={styles.search}
-        placeholder="Enter an album name"
+        placeholder="Search a album of your choice"
       />
       <button className={styles.searchButton}>{<SearchIcon />}</button>
-    </div>
+    </form>
   );
 }
 
