@@ -1,4 +1,4 @@
-.feedbackButton {
+/* .feedbackButton {
   border-radius: 12px;
   font-family: "Poppins", sans-serif;
   width: 170px;
@@ -11,5 +11,15 @@
 }
 
 .feedbackButton:hover {
+  cursor: pointer;
+} */
+
+.button {
+  color: #34c94b;
+  background-color: #121212;
+  font-family: "Poppins", sans-serif;
+}
+
+.button:hover {
   cursor: pointer;
 }
