@@ -6,8 +6,8 @@
 
 import React from "react";
 import Button from "@mui/material/Button";
-import "./Qbutton.css";
-export default function Qbutton({ content }) {
+import "./QButton.css";
+export default function QButton({ name }) {
   return (
     <Button
       variant="contained"
@@ -19,7 +19,7 @@ export default function Qbutton({ content }) {
         "font-family": "Poppins",
       }}
     >
-      {content}
+      {name}
     </Button>
   );
 }
