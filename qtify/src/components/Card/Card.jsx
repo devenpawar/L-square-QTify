@@ -1,58 +1,99 @@
-import React from "react";
-import { Link } from "react-router-dom";
-import styles from "./Card.module.css";
-import { Tootltip, Chip } from "@mui/material";
-export default function Card({ data, type }) {
-  const getCard = (type) => {
-    switch (type) {
-      case "album": {
-        const { image, follows, title, slug, songs } = data;
-        return (
-          <Tootltip title={`${songs.length} songs`} placement="top" arrow>
-            <Link to={`/album/${slug}`}>
-              <div className={styles.wrapper}>
-                <div className={styles.card}>
-                  <img src={image} alt="album" loading="lazy" />
-                  <div className={styles.banner}>
-                    <Chip
-                      label={`${follows} Follows`}
-                      size="small"
-                      className={styles.Chip}
-                    />
-                  </div>
-                </div>
-                <div className={styles.titleWrapper}>
-                  <p>{title}</p>
-                </div>
-              </div>
-            </Link>
-          </Tootltip>
-        );
-      }
-      case "song": {
-        const { image, likes, title } = data;
+import React, { useEffect, useState } from "react";
+import CardMusic from "./CardMusic";
+import axios from "axios";
+import Grid from "@mui/material/Grid";
+import { Typography, Button } from "@mui/material";
+import "./Card.css";
 
-        return (
-          <div className={styles.wrapper}>
-            <div className={styles.card}>
-              <img src={image} alt="song" loading="lazy" />
-              <div className={styles.banner}>
-                <div className={styles.pill}>
-                  <p>{likes} Likes</p>
-                </div>
-              </div>
-            </div>
-            <div className={styles.titleWrapper}>
-              <p>{title}</p>
-            </div>
-          </div>
-        );
-      }
+const Card = () => {
+  const [topAlbumCard, setTopAlbumCard] = useState([]);
+  const [newAlbumCard, setNewAlbumCard] = useState([]);
+  const [isTopAlbumCollapsed, setIsTopAlbumCollapsed] = useState(true);
+  const [isNewAlbumCollapsed, setIsNewAlbumCollapsed] = useState(true);
 
-      default:
-        <></>;
+  const fetchCardMusic = async (url) => {
+    try {
+      const resp = await axios.get(url);
+      const cards = resp.data;
+      return cards;
+    } catch (err) {
+      console.error("Error fetching card music:", err);
     }
   };
 
-  return getCard(type);
-}
+  useEffect(() => {
+    const fetchData = async () => {
+      const topAlbumData = await fetchCardMusic(
+        `https://qtify-backend-labs.crio.do/albums/top`
+      );
+      const newAlbumData = await fetchCardMusic(
+        `https://qtify-backend-labs.crio.do/albums/new`
+      );
+      setTopAlbumCard(topAlbumData);
+      setNewAlbumCard(newAlbumData);
+    };
+
+    fetchData();
+  }, []);
+
+  const handleTopAlbumCollapse = () => {
+    setIsTopAlbumCollapsed(!isTopAlbumCollapsed);
+  };
+
+  const handleNewAlbumCollapse = () => {
+    setIsNewAlbumCollapsed(!isNewAlbumCollapsed);
+  };
+
+  return (
+    <>
+      <div className="albums album-bar">
+        <Typography>Top Albums</Typography>
+        <Button onClick={handleTopAlbumCollapse}>
+          {isTopAlbumCollapsed ? "Show All" : "Collapse"}
+        </Button>
+      </div>
+      <Grid container spacing={2} className="albums">
+        {topAlbumCard.map((cardItem, index) => (
+          <Grid
+            item
+            key={cardItem.id}
+            xs={6}
+            sm={4}
+            md={3}
+            lg={2}
+            style={{
+              display: isTopAlbumCollapsed && index > 5 ? "none" : "block",
+            }}
+          >
+            <CardMusic card={cardItem} className="cards" />
+          </Grid>
+        ))}
+      </Grid>
+      <div className="albums album-bar">
+        <Typography>New Albums</Typography>
+        <Button onClick={handleNewAlbumCollapse}>
+          {isNewAlbumCollapsed ? "Show All" : "Collapse"}
+        </Button>
+      </div>
+      <Grid container spacing={2} className="albums">
+        {newAlbumCard.map((cardItem, index) => (
+          <Grid
+            item
+            key={cardItem.id}
+            xs={6}
+            sm={4}
+            md={3}
+            lg={2}
+            style={{
+              display: isNewAlbumCollapsed && index > 5 ? "none" : "block",
+            }}
+          >
+            <CardMusic card={cardItem} className="cards" />
+          </Grid>
+        ))}
+      </Grid>
+    </>
+  );
+};
+
+export default Card;
