@@ -1,0 +1,12 @@
+.carousel-container {
+  margin: 0 -10px; /* Adjust the margin to control the gap between cards */
+}
+
+.carousel-card {
+  padding: 0 10px; /* Adjust the padding to control the gap between cards */
+}
+
+.slick-prev:before,
+.slick-next:before {
+  color: yellow;
+}

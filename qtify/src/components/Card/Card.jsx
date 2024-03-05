@@ -4,6 +4,8 @@ import axios from "axios";
 import Grid from "@mui/material/Grid";
 import { Typography, Button } from "@mui/material";
 import "./Card.css";
+import CircularProgress from "@mui/joy/CircularProgress";
+import Carousel from "../Carousel/Carousel";
 
 const Card = () => {
   const [topAlbumCard, setTopAlbumCard] = useState([]);
@@ -52,22 +54,33 @@ const Card = () => {
           {isTopAlbumCollapsed ? "Show All" : "Collapse"}
         </Button>
       </div>
-      <Grid container spacing={2} className="albums">
-        {topAlbumCard.map((cardItem, index) => (
-          <Grid
-            item
-            key={cardItem.id}
-            xs={6}
-            sm={4}
-            md={3}
-            lg={2}
-            style={{
-              display: isTopAlbumCollapsed && index > 5 ? "none" : "block",
-            }}
-          >
-            <CardMusic card={cardItem} className="cards" />
+      <Grid
+        container
+        className="albums"
+        spacing={2}
+        sx={{ display: "flex", alignItems: "center", justifyContent: "center" }}
+      >
+        {isTopAlbumCollapsed ? (
+          <Grid item lg={11.3}>
+            <Carousel>
+              {topAlbumCard.length === 0 ? (
+                <CircularProgress variant="solid" color="success" />
+              ) : (
+                topAlbumCard.map((cardItem, index) => (
+                  <CardMusic card={cardItem} className="cards" />
+                ))
+              )}
+            </Carousel>
           </Grid>
-        ))}
+        ) : (
+          <>
+            {topAlbumCard.map((cardItem) => (
+              <Grid item key={cardItem.id} xs={6} sm={4} md={3} lg={1.6}>
+                <CardMusic card={cardItem} className="cards" />
+              </Grid>
+            ))}
+          </>
+        )}
       </Grid>
       <div className="albums album-bar">
         <Typography>New Albums</Typography>
@@ -75,22 +88,29 @@ const Card = () => {
           {isNewAlbumCollapsed ? "Show All" : "Collapse"}
         </Button>
       </div>
-      <Grid container spacing={2} className="albums">
-        {newAlbumCard.map((cardItem, index) => (
-          <Grid
-            item
-            key={cardItem.id}
-            xs={6}
-            sm={4}
-            md={3}
-            lg={2}
-            style={{
-              display: isNewAlbumCollapsed && index > 5 ? "none" : "block",
-            }}
-          >
-            <CardMusic card={cardItem} className="cards" />
+      <Grid
+        container
+        spacing={2}
+        className="albums"
+        sx={{ display: "flex", alignItems: "center", justifyContent: "center" }}
+      >
+        {isNewAlbumCollapsed ? (
+          <Grid item lg={11.2}>
+            <Carousel>
+              {newAlbumCard.map((cardItem, index) => (
+                <CardMusic card={cardItem} className="cards" />
+              ))}
+            </Carousel>
           </Grid>
-        ))}
+        ) : (
+          <>
+            {newAlbumCard.map((cardItem, index) => (
+              <Grid item key={cardItem.id} xs={6} sm={4} md={3} lg={1.6}>
+                <CardMusic card={cardItem} className="cards" />
+              </Grid>
+            ))}
+          </>
+        )}
       </Grid>
     </>
   );
